@@ -19,7 +19,7 @@ python3 Resources/utilities/crypt_executables.py -i ./ -p malware --decrypt
 
 ## Emulation Team Infrastructure
 
-1. **Linux Attack Platform**: tested and executed on Kali Linux 2019.1
+1. **Linux Attack Platform**: tested and executed on Ubuntu 22.04. However, you can use the [Offline Installation Script](../../Resources/setup/install_offline_dependencies.sh) on any internet-connected Linux machine and transfer these tools to another airgapped machine of the same OS version and distribution.
     - [PAExec](https://github.com/poweradminllc/PAExec)
     - [pyyaml](https://github.com/yaml/pyyaml)
     - [Rubeus](https://github.com/GhostPack/Rubeus)
@@ -54,11 +54,13 @@ This methodology assumes the following static IP address configurations:
 
 3 targets, all domain joined:
 
-1. *Domain Controller*: tested and executed on Windows Server 2k19 - Build 17763.
+1. *Domain Controller*: tested and executed on Windows Server 2019 - Build 17763.
 
 2. *User machine 1*: tested and executed on Windows 10 - Build 19042.
 
 3. *User machine 2*: tested and executed on Windows 10 - Build 19042.
+
+4. *(Optional) Event Logger*: tested and executed using Windows Server 2019 - Build 17763.
 
 ---
 
@@ -68,13 +70,18 @@ This methodology assumes the following static IP address configurations:
 | ------ | ------ | ------|
 | Domain Controller | wizard | 10.0.0.4 |
 | User machine 1 | dorothy | 10.0.0.7 |
-| User machine 2 | Toto | 10.0.0.8 |
+| User machine 2 | toto | 10.0.0.8 |
+|(optional) Event Logger| event-logger | 10.0.0.100|
 
 ### Domain Controller Setup
 
+Ensure RDP is enabled and running on the Windows machine. Go to Settings > About this PC > System info > Remote Settings. At the bottom, select "Allow remote access." Under advanced settings, add the group OZ.local\Domain Users.
+
+Configure a new domain admin named `vfleming` with the password `q27VYN8xflPcYumbLMit`.
+
 RDP into domain controller
 
-`xfreerdp +clipboard /u:oz\\vfleming /p:"q27VYN8xflPcYumbLMit" /v:10.0.0.4 /drive:X,wizard_spider/Resources/setup`
+`xfreerdp +clipboard /u:oz\\vfleming /p:"q27VYN8xflPcYumbLMit" /v:10.0.0.4 /drive:X,.`
 
 Open Windows Defender, toggle all nobs to the off position. Also go to App and Browser control and turn off Smart Screen.
 
@@ -83,8 +90,7 @@ Open PowerShell being sure to select "Run as Administrator":
 ```
 cd \\TSCLIENT\X
 Set-Executionpolicy bypass -force
-.\install_adfind.ps1
-.\install_firefox.ps1
+xcopy \ael\Enterprise\wizard_spider\Resources\setup\* \C:Users\vfleming\Downloads\. /s /e
 .\create_domain_users.ps1
 .\give_rdp_permissions.ps1
 .\setup_spn.ps1
@@ -92,21 +98,22 @@ Set-Executionpolicy bypass -force
 .\disable-defender.ps1
 .\file_generator\generate-files.exe -d "C:\Users\Public\" -c 100 --seed "EVALS" --noprompt
 .\file_generator\generate-files.exe -d "C:\Users\" -c 50 --seed "EVALS" --noprompt
+
 ```
 
-Next we need to download Microsoft Visual C++ Redistributable.
-Open FireFox; close all spurious prompts / decline everything.
+Open the downloads folder and perform the following installs:
+1. NDP48-x86-x64-AllOS-ENU.exe (this will require a restart)
+2. 7z2408-x64
+3. VC_redist.x64
+4. OpenSSH
 
-Go to this page:
-
-<https://support.microsoft.com/en-us/topic/the-latest-supported-visual-c-downloads-2647da03-1eea-4433-9aff-95f26a218cc0>
-
-Download and install the 32-bit and 64-bit versions.
 
 Reboot the workstation
 `Restart-Computer -Force`
 
 ### Dorothy / 10.0.0.7 Setup
+
+Ensure RDP is enabled and running on the Windows machine. Go to Settings > About this PC > System info > Remote Settings. At the bottom, select "Allow remote access." Under advanced settings, add the group OZ.local\Domain Users.
 
 1. RDP into Dorothy
 
@@ -116,22 +123,21 @@ xfreerdp +clipboard /u:oz\\vfleming /p:"q27VYN8xflPcYumbLMit" /v:10.0.0.7 /drive
 
 2. Open Windows Defender, toggle all nobs to the off position.
 
-3. Configure Outlook and office?
+3. Configure Outlook and Office if licenses are available. Otherwise, skip this.
 
 4. Open PowerShell being sure to select "Run as Administrator":
 
 ```
-cd \\TSCLIENT\X
+xcopy \TSCLIENT\X\ael\Enterprise\wizard_spider\Resources\setup\* \C:Users\vfleming\Downloads\. /s /e
 Set-Executionpolicy bypass -force
 .\give_rdp_permissions.ps1
 .\enable-winrm.ps1
 .\disable-defender.ps1
 .\file_generator\generate-files.exe -d "C:\Users\Public\" -c 100 --seed "EVALS" --noprompt
 .\file_generator\generate-files.exe -d "C:\Users\" -c 50 --seed "EVALS" --noprompt
-.\file_generator\generate-files.exe -d "C:\Users\" -c 50 --seed "EVALS" --noprompt
 ```
 
-For local testing:
+For local testing and if Office is available:
 
 ```
 .\install_msoffice.ps1
@@ -139,29 +145,24 @@ For local testing:
 
 Open Word and Outlook; surpress all spurious prompts.
 
-Close Word and outlook.
+Close Word and Outlook.
 
 ```
 .\setup_outlook.ps1
 ```
 
-5. Next we need to download Microsoft Visual C++ Redistributable.
+Open the downloads folder and perform the following installs:
+1. 7z2408-x64
+2. VC_redist.x64
+3. OpenSSH
 
-Open Edge; close all spurious prompts / decline everything.
-
-Go to this page:
-
-[https://support.microsoft.com/en-us/topic/the-latest-supported-visual-c-downloads-2647da03-1eea-4433-9aff-95f26a218cc0](https://support.microsoft.com/en-us/topic/the-latest-supported-visual-c-downloads-2647da03-1eea-4433-9aff-95f26a218cc0)
-
-Download and install the 32-bit and 64-bit versions.
-
-6. Reboot the workstation
+Reboot the workstation
 
 ```
 Restart-Computer -Force
 ```
 
-7. Log back into Dorothy as user judy
+1. Log back into Dorothy as user judy
 
 ```
 xfreerdp +clipboard /u:oz\\judy /p:"Passw0rd!" /v:10.0.0.7
@@ -178,7 +179,7 @@ icacls "C:\Windows\*" /grant judy:(OI)(CI)F /T
 
 8. Sign out of the RDP session.
 
-### Configure Toto / 10.0.0.8
+### Toto / 10.0.0.8 Setup
 
 1. RDP into Toto
 
@@ -200,12 +201,19 @@ Set-Executionpolicy bypass -force
 .\file_generator\generate-files.exe -d "C:\Users\" -c 50 --seed "EVALS" --noprompt
 .\file_generator\generate-files.exe -d "C:\Users\" -c 50 --seed "EVALS" --noprompt
 ```
+Open the downloads folder and perform the following installs:
+1. 7z2408-x64
+2. VC_redist.x64
+3. OpenSSH
 
-4. Reboot the workstation
+Reboot the workstation
 
 ```
 Restart-Computer -Force
 ```
+
+
+## Configuring a Windows Event Logger 
 
 ## Additional Plan Resources
 
