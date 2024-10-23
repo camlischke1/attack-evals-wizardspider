@@ -25,6 +25,7 @@ python3 Resources/utilities/crypt_executables.py -i ./ -p malware --decrypt
     - [Rubeus](https://github.com/GhostPack/Rubeus)
     - [Mimikatz](https://github.com/gentilkiwi/mimikatz/wiki)
     - [FreeRDP](https://github.com/FreeRDP/FreeRDP)
+    - SSHPass
 
 ---
 

