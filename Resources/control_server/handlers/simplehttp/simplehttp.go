@@ -192,6 +192,7 @@ func GetFileFromServer(w http.ResponseWriter, r *http.Request) {
 	}
 	if resp.Status == "404 Not Found" {
 		w.WriteHeader(404)
+		logger.Info("404 NOT FOUND: Unsuccessful download from getFile endpoint on C2 server for %s",fileName)
 		return
 	}
 	fileData, err := ioutil.ReadAll(resp.Body)
@@ -199,6 +200,7 @@ func GetFileFromServer(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, err)
 	}
 	fmt.Fprintf(w, "%s", fileData)
+	logger.Info("Successful download from getFile endpoint on C2 server for %s",fileName)
 }
 
 func ForwardGetFileFromServer(fileName string) (*http.Response, error) {

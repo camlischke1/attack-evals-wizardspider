@@ -14,20 +14,20 @@ func StartHandlers() {
 	restAPIAddr := "127.0.0.1:9999"
 
 	// To Do - handlers should pull bind information from a configuration file
-	simplehttp.StartHandler("192.168.0.4:8080", restAPIAddr)
-	logger.Success("Started simpleHTTP handler on 192.168.0.4:8080")
+	simplehttp.StartHandler("0.0.0.0:8080", restAPIAddr)
+	logger.Success("Started simpleHTTP handler on 0.0.0.0:8080")
 
-	https.StartHandler("192.168.0.4:443", restAPIAddr, "", "")
-	logger.Success("Started HTTPS handler on 192.168.0.4:443")
+	https.StartHandler("0.0.0.0:443", restAPIAddr, "", "")
+	logger.Success("Started HTTPS handler on 0.0.0.0:443")
 
-	trickbot.StartHandler("192.168.0.4:447", restAPIAddr)
-	logger.Success("Started TrickBot handler on 192.168.0.4:447")
+	trickbot.StartHandler("0.0.0.0:447", restAPIAddr)
+	logger.Success("Started TrickBot handler on 0.0.0.0:447")
 
-	emotet.StartHandler("192.168.0.4:80", "127.0.0.1:9999")
-	logger.Success("Started Emotet handler on 192.168.0.4:80")
+	emotet.StartHandler("0.0.0.0:80", "127.0.0.1:9999")
+	logger.Success("Started Emotet handler on 0.0.0.0:80")
 
-	exaramel.StartHandler("192.168.0.4:8443", "127.0.0.1:9999", "", "")
-	logger.Success("Started Exaramel handler on 192.168.0.4:8443")
+	exaramel.StartHandler("0.0.0.0:8443", "127.0.0.1:9999", "", "")
+	logger.Success("Started Exaramel handler on 0.0.0.0:8443")
 	// To do - each handler should send a signal to indicate it started successfully
 }
 
