@@ -1,0 +1,44 @@
+[INFO] 2024/10/28 15:45:58 Initializing REST API from config file:  ./config/restAPI_config.yml
+[SUCCESS] 2024/10/28 15:45:58 REST API configuration set
+   [INFO] 2024/10/28 15:45:58 Starting REST API server
+[SUCCESS] 2024/10/28 15:45:58 REST API server is listening on:  127.0.0.1:9999
+   [INFO] 2024/10/28 15:45:58 Starting C2 handlers
+[SUCCESS] 2024/10/28 15:45:58 Started simpleHTTP handler on 0.0.0.0:8080
+[SUCCESS] 2024/10/28 15:45:58 Started HTTPS handler on 0.0.0.0:443
+[SUCCESS] 2024/10/28 15:45:58 Started TrickBot handler on 0.0.0.0:447
+[SUCCESS] 2024/10/28 15:45:58 Started Emotet handler on 0.0.0.0:80
+   [INFO] 2024/10/28 15:45:58 Starting Exaramel Handler
+[SUCCESS] 2024/10/28 15:45:58 Started Exaramel handler on 0.0.0.0:8443
+   [INFO] 2024/10/28 15:45:58 Waiting for connections
+
+[SUCCESS] 2024/10/28 15:45:58 *** New session established ***
++------------------------+-------------------+-----------------+------------+------+------+
+|          GUID          |    IP ADDRESS     |    HOSTNAME     |    USER    | PID  | PPID |
++------------------------+-------------------+-----------------+------------+------+------+
+| DESKTOP-9IA6T0M-Emotet | 192.168.0.5:50667 | DESKTOP-9IA6T0M | local_user | 4184 |  264 |
++------------------------+-------------------+-----------------+------------+------+------+
+Current Directory:  C:\Windows\system32
++------------------------+-------------------+-----------------+------------+---------------------+------+------+
+|          GUID          |    IP ADDRESS     |    HOSTNAME     |    USER    |         CWD         | PID  | PPID |
++------------------------+-------------------+-----------------+------------+---------------------+------+------+
+| DESKTOP-9IA6T0M-Emotet | 192.168.0.5:50667 | DESKTOP-9IA6T0M | local_user | C:\Windows\system32 | 4184 |  264 |
++------------------------+-------------------+-----------------+------------+---------------------+------+------+
+
+
+
+
+
+
+
+
+
+
+
+   [{'dir': 'C:\\Windows\\system32',
+  'firstCheckIn': '10-28-2024 15:45:58',
+  'guid': 'DESKTOP-9IA6T0M-Emotet',
+  'hostName': 'DESKTOP-9IA6T0M',
+  'ipAddr': '192.168.0.5:50667',
+  'pid': 4184,
+  'ppid': 264,
+  'user': 'local_user'}]
