@@ -26,14 +26,6 @@ Current Directory:  C:\Windows\system32
 
 
 
-
-
-
-
-
-
-
-
    [{'dir': 'C:\\Windows\\system32',
   'firstCheckIn': '10-28-2024 15:45:58',
   'guid': 'DESKTOP-9IA6T0M-Emotet',
@@ -42,3 +34,24 @@ Current Directory:  C:\Windows\system32
   'pid': 4184,
   'ppid': 264,
   'user': 'local_user'}]
+  [{'dir': 'C:\\users\\local_user',
+  'firstCheckIn': '10-30-2024 14:34:31',
+  'guid': '0yWI1mJHy0Ni0Nsx',
+  'hostName': 'W602931718',
+  'ipAddr': '0.0.0.0',
+  'pid': 5200,
+  'ppid': 8032,
+  'user': 'DESKTOP-9IA6T0M'}]
+
+
+
+  [SUCCESS] 2024/10/30 14:33:22 *** New session established ***
++------------------+------------+------------+-----------------+------+------+                                      
+|       GUID       | IP ADDRESS |  HOSTNAME  |      USER       | PID  | PPID |
++------------------+------------+------------+-----------------+------+------+
+| Qkf5cAkkXraPtLpZ | 0.0.0.0    | W602931718 | DESKTOP-9IA6T0M | 4956 | 4400 |
++------------------+------------+------------+-----------------+------+------+
+Current Directory:  C:\users\local_user
+   [INFO] 2024/10/30 14:33:23 Task Event: /camp1/DESKTOP-9IA6T0M_W602931718.Qkf5cAkkXraPtLpZMUf5Wn8hYkh4VGfk/80/Qkf5cAkkXraPtLpZ                                                                                                        
+   [INFO] 2024/10/30 14:33:28 Task Event: /camp1/DESKTOP-9IA6T0M_W602931718.Qkf5cAkkXraPtLpZMUf5Wn8hYkh4VGfk/80/Qkf5cAkkXraPtLpZ                                                                                                        
+   [INFO] 2024/10/30 14:33:35 Task Event: /camp1/DESKTOP-9IA6T0M_W602931718.Qkf5cAkkXraPtLpZMUf5Wn8hYkh4VGfk/80/Qkf5cAkkXraPtLpZ 
