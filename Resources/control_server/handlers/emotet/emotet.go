@@ -290,11 +290,6 @@ func registerImplant(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "can't read guid", http.StatusBadRequest)
 	}
 
-	// fix the GUID to be predictable
-	if idx := strings.Index(guid,"_"); idx != -1 {
-		guid = guid[:idx]
-	}
-	guid = guid + "-Emotet"
 
 	// Create json with Implant data
 	registrationPreJson := Registration{guid, r.RemoteAddr, user, hostName, dir, pid, ppid}
