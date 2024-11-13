@@ -38,30 +38,16 @@ func init() {
 		panic(err)
 	}
 	stdoutAndLogFile := io.MultiWriter(os.Stdout, logFile)
+	stderrAndLogFile := io.MultiWriter(os.Stderr, logFile)
 
-	debugLogger = log.New(os.Stderr, debugPrefix, log.Ldate|log.Ltime)
-	debugLogger.SetOutput(stdoutAndLogFile)
-
-	infoLogger = log.New(os.Stdout, infoPrefix, log.Ldate|log.Ltime)
-	infoLogger.SetOutput(stdoutAndLogFile)
-
-	successLogger = log.New(os.Stdout, successPrefix, log.Ldate|log.Ltime)
-	successLogger.SetOutput(stdoutAndLogFile)
-
-	taskLogger = log.New(os.Stdout, taskLoggerPrefix, log.Ldate|log.Ltime)
-	successLogger.SetOutput(stdoutAndLogFile)
-
-	warningLogger = log.New(os.Stdout, warningPrefix, log.Ldate|log.Ltime)
-	warningLogger.SetOutput(stdoutAndLogFile)
-
-	errorLogger = log.New(os.Stderr, errorPrefix, log.Ldate|log.Ltime)
-	errorLogger.SetOutput(stdoutAndLogFile)
-
-	fatalLogger = log.New(os.Stderr, fatalPrefx, log.Ldate|log.Ltime)
-	fatalLogger.SetOutput(stdoutAndLogFile)
-
-	panicLogger = log.New(os.Stderr, panicPrefix, log.Ldate|log.Ltime)
-	panicLogger.SetOutput(stdoutAndLogFile)
+	debugLogger = log.New(stdoutAndLogFile, debugPrefix, log.Ldate|log.Ltime)
+	infoLogger = log.New(stdoutAndLogFile, infoPrefix, log.Ldate|log.Ltime)
+	successLogger = log.New(stdoutAndLogFile, successPrefix, log.Ldate|log.Ltime)
+	taskLogger = log.New(stdoutAndLogFile, taskLoggerPrefix, log.Ldate|log.Ltime)
+	warningLogger = log.New(stdoutAndLogFile, warningPrefix, log.Ldate|log.Ltime)
+	errorLogger = log.New(stderrAndLogFile, errorPrefix, log.Ldate|log.Ltime)
+	fatalLogger = log.New(stderrAndLogFile, fatalPrefx, log.Ldate|log.Ltime)
+	panicLogger = log.New(stderrAndLogFile, panicPrefix, log.Ldate|log.Ltime)
 
 }
 
