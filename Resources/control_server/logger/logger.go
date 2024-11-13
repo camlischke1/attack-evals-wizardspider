@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	fileToLog string = "logs.txt"
+	fileToLog string = "/home/cyberseal/c2_output.txt"
 
 	debugLogger   *log.Logger
 	infoLogger    *log.Logger
